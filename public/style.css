@@ -1,0 +1,49 @@
+
+
+.fa-arrow-up {
+    color: green;
+}
+
+.fa-arrow-down {
+    color: red;
+}
+
+.for {
+    color: green;
+}
+
+.against {
+    color: red;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: space-around;
+    background: pink;
+    
+    margin: 0 auto;
+}
+
+
+
+.fightEntry {
+    list-style: none;
+    margin: 1vw;
+}
+
+.fighter1Name {
+    color: red;
+    margin: 1rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.fighter2Name {
+    color: blue;
+    margin: 1rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
