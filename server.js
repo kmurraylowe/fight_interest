@@ -30,6 +30,7 @@ app.get('/', (req,res)=>{
     db.collection(dbName).find().sort({for: -1}).toArray()
     .then( data => {
         res.render('index.ejs', {items: data})
+       
     })
     .catch(err => console.error(err)) 
 })
@@ -80,9 +81,10 @@ app.put('/addOneAgainst', (req,res)=>{
 
 
 app.delete('/deleteFight', (req,res)=>{
-    db.collection(dbName).deleteOne({Fighter1: req.body.delFight1, Fighter2: req.body.delFight2})
+    
+    db.collection(dbName).deleteOne({_id: req.body.fightId})
     .then(result => {
-        console.log('Fight Deleted')
+        console.log(`${req.body.fightId} deleted`)
         res.json("Fight Deleted")
     })
     .catch(err => console.error(err))

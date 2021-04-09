@@ -17,16 +17,14 @@ Array.from(downArrow).forEach((ele)=>{
 })
 
 async function deleteFight(){
-    const fight1ToDelete = this.parentNode.childNodes[1].innerText
-    const fight2ToDelete = this.parentNode.childNodes[5].innerText
-    console.log(fight1ToDelete )
+    const fightId = this.parentNode.dataset.id
     try{
         const res = await fetch('deleteFight', {
             method: 'delete',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                'delFight1': fight1ToDelete,
-                'delFight2': fight2ToDelete
+                'fightId': fightId
+               
             })
         })
         const data = await res.json()
