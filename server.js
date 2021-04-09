@@ -3,6 +3,7 @@ const app = express()
 const MongoClient = require('mongodb').MongoClient
 const PORT = 3000
 require('dotenv').config()
+const ObjectID = require('mongodb').ObjectID
 
 let db,
     connectionString = process.env.DB_STRING
@@ -45,7 +46,8 @@ app.post('/addFight', (req,res)=>{
 })
 
 app.put('/addOneFor', (req,res)=>{
-    db.collection(dbName).updateOne({Fighter1: req.body.upFight1, Fighter2: req.body.upFight2, for: req.body.forFight},{
+    const fId = new ObjectID(req.body.fightId)
+    db.collection(dbName).updateOne({_id: fId},{
         $set: {
             for: req.body.forFight + 1
         }
@@ -61,7 +63,8 @@ app.put('/addOneFor', (req,res)=>{
 })
 
 app.put('/addOneAgainst', (req,res)=>{
-    db.collection(dbName).updateOne({Fighter1: req.body.upFight1, Fighter2: req.body.upFight2, against: req.body.againstFight},{
+    const fId = new ObjectID(req.body.fightId)
+    db.collection(dbName).updateOne({_id: fId},{
         $set: {
             against: req.body.againstFight + 1
         }
@@ -81,8 +84,8 @@ app.put('/addOneAgainst', (req,res)=>{
 
 
 app.delete('/deleteFight', (req,res)=>{
-    
-    db.collection(dbName).deleteOne({_id: req.body.fightId})
+    const fId = new ObjectID(req.body.fightId)
+    db.collection(dbName).deleteOne({_id: fId})
     .then(result => {
         console.log(`${req.body.fightId} deleted`)
         res.json("Fight Deleted")

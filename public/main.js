@@ -18,6 +18,7 @@ Array.from(downArrow).forEach((ele)=>{
 
 async function deleteFight(){
     const fightId = this.parentNode.dataset.id
+    console.log(fightId)
     try{
         const res = await fetch('deleteFight', {
             method: 'delete',
@@ -28,22 +29,25 @@ async function deleteFight(){
             })
         })
         const data = await res.json()
+        console.log(fightId)
         console.log(data)
         location.reload()
     }catch(err){console.error(err)}
 }
 
 async function forFight(){
-    const fight1ToUp = this.parentNode.childNodes[1].innerText
-    const fight2ToUp = this.parentNode.childNodes[5].innerText
+    const fightId = this.parentNode.dataset.id
+    // const fight1ToUp = this.parentNode.childNodes[1].innerText
+    // const fight2ToUp = this.parentNode.childNodes[5].innerText
     const forFight = Number(this.parentNode.childNodes[7].innerText)
     try{
         const res = await fetch('addOneFor', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                'upFight1': fight1ToUp,
-                'upFight2': fight2ToUp,
+                'fightId': fightId,
+                // 'upFight1': fight1ToUp,
+                // 'upFight2': fight2ToUp,
                 'forFight': forFight
             })
         })
@@ -54,16 +58,18 @@ async function forFight(){
 }
 
 async function againstFight(){
-    const fight1ToUp = this.parentNode.childNodes[1].innerText
-    const fight2ToUp = this.parentNode.childNodes[5].innerText
+    const fightId = this.parentNode.dataset.id
+    // const fight1ToUp = this.parentNode.childNodes[1].innerText
+    // const fight2ToUp = this.parentNode.childNodes[5].innerText
     const againstFight = Number(this.parentNode.childNodes[11].innerText)
     try{
         const res = await fetch('addOneAgainst', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                'upFight1': fight1ToUp,
-                'upFight2': fight2ToUp,
+                'fightId': fightId,
+                // 'upFight1': fight1ToUp,
+                // 'upFight2': fight2ToUp,
                 'againstFight': againstFight
             })
         })
