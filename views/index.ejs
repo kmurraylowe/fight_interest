@@ -9,11 +9,13 @@
     <title>Document</title>
 </head>
 <body>
+    <div class="hold">
     <section class="container">
-    <h1>Fights to see</h1>
+    <h1 class="title">Fights to see</h1>
 <ul class="fightList">
     <% for(let i=0; i < items.length; i++) {%>
         <li class="fightEntry" data-id='<%=items[i]._id%>'>
+            <span class="userName"><%= items[i].User %></span>
             <span class="fighter1Name"><%= items[i].Fighter1 %></span>
             <span class="versus">VS</span>
             <span class="fighter2Name"><%= items[i].Fighter2 %></span>
@@ -27,30 +29,20 @@
     <% } %>
 </ul>
 
+</section>
+</div>
 
 
-
-    <!-- <% items.forEach( ele => { %>
-        
-        <li class="fightEntry" data-id='<%=ele._id%>'>
-            <span class="fighter1Name"><%= ele.Fighter1 %></span>
-            <span class="versus">VS</span>
-            <span class="fighter2Name"><%= ele.Fighter2 %></span>
-            <span class="for"><%= ele.for %></span>
-            <span class="fa fa-arrow-up"></span>
-            <span class="against"><%= ele.against %></span>
-            <span class="fa fa-arrow-down"></span>
-            <span class="fa fa-trash"></span>
-    
-        </li>
-        <% }) %> -->
-<form action="/addFight" method="POST">
+  <section class="formStyle">
+<form action="/fights/addFight" method="POST">
     <input type="text" placeholder="FighterA" name="Fighter1">
     <span>VS</span>
     <input type="text" placeholder="FighterB" name="Fighter2">
     <input type="submit">
+    <a href="../auth/logout">logout</a>
 </form>
 </section>
+
 <script src='main.js'></script>
 </body>
 </html>

@@ -9,18 +9,18 @@ Array.from(deleteBtn).forEach((ele)=>{
 })
 
 Array.from(upArrow).forEach((ele)=>{
-    ele.addEventListener('click', forFight)
+    ele.addEventListener('click', addOneFor)
 })
 
 Array.from(downArrow).forEach((ele)=>{
-    ele.addEventListener('click', againstFight)
+    ele.addEventListener('click', addOneAgainst)
 })
 
 async function deleteFight(){
     const fightId = this.parentNode.dataset.id
-    console.log(fightId)
+    
     try{
-        const res = await fetch('deleteFight', {
+        const res = await fetch('fights/deleteFight', {
             method: 'delete',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -35,45 +35,39 @@ async function deleteFight(){
     }catch(err){console.error(err)}
 }
 
-async function forFight(){
+async function addOneFor(){
     const fightId = this.parentNode.dataset.id
-    // const fight1ToUp = this.parentNode.childNodes[1].innerText
-    // const fight2ToUp = this.parentNode.childNodes[5].innerText
     const forFight = Number(this.parentNode.childNodes[7].innerText)
     try{
-        const res = await fetch('addOneFor', {
+        const res = await fetch('fights/addOneFor', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 'fightId': fightId,
-                // 'upFight1': fight1ToUp,
-                // 'upFight2': fight2ToUp,
                 'forFight': forFight
             })
         })
         const data = await res.json()
+        console.log(fightId)
         console.log(data)
         location.reload()
     }catch(err){console.error(err)}
 }
 
-async function againstFight(){
+async function addOneAgainst(){
     const fightId = this.parentNode.dataset.id
-    // const fight1ToUp = this.parentNode.childNodes[1].innerText
-    // const fight2ToUp = this.parentNode.childNodes[5].innerText
     const againstFight = Number(this.parentNode.childNodes[11].innerText)
     try{
-        const res = await fetch('addOneAgainst', {
+        const res = await fetch('fights/addOneAgainst', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 'fightId': fightId,
-                // 'upFight1': fight1ToUp,
-                // 'upFight2': fight2ToUp,
                 'againstFight': againstFight
             })
         })
         const data = await res.json()
+        console.log(fightId)
         console.log(data)
         location.reload()
     }catch(err){console.error(err)}

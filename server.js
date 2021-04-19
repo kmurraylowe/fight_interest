@@ -1,20 +1,19 @@
 const express = require('express')
 const app = express()
-const MongoClient = require('mongodb').MongoClient
-const PORT = 3000
-require('dotenv').config()
-const ObjectID = require('mongodb').ObjectID
+const mongoose = require('mongoose')
+const passport = require('passport')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const connectDB = require('./config/database')
+const authRoutes = require('./routes/auth')
+const fightRoutes = require('./routes/fightRoutes')
+const homeRoutes = require('./routes/home')
 
-let db,
-    connectionString = process.env.DB_STRING
-    dbName = "fight-interest"
+require('dotenv').config({path: './config/.env'})
 
-MongoClient.connect(connectionString, {useUnifiedTopology: true})
- .then(client=>{
-     console.log(`Connected to ${dbName} Database`)
-     db = client.db(dbName)
- })
- .catch(err => console.error(err))
+require('./config/passport')(passport)
+
+connectDB()
 
 
 app.set('view engine', 'ejs')
@@ -22,74 +21,26 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+//Sessions
+app.use(
+    session({
+      secret: 'keyboard cat',
+      resave: false,
+      saveUninitialized: false,
+      store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    })
+  )
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use('/', homeRoutes)
+app.use('/fights', fightRoutes)
+app.use('/auth', authRoutes)
 
 app.listen(process.env.PORT || PORT, ()=>{
-    console.log(`Server running on port ${PORT}`)
+    console.log(`Server running `)
 })
 
-app.get('/', (req,res)=>{
-    db.collection(dbName).find().sort({for: -1}).toArray()
-    .then( data => {
-        res.render('index.ejs', {items: data})
-       
-    })
-    .catch(err => console.error(err)) 
-})
 
-app.post('/addFight', (req,res)=>{
-    db.collection(dbName).insertOne({Fighter1: req.body.Fighter1, Fighter2: req.body.Fighter2, for: 0, against: 0})
-    .then(result=>{
-        console.log("Fight Added")
-        res.redirect('/')
-    })
-    .catch(err=> console.error(err))
-})
-
-app.put('/addOneFor', (req,res)=>{
-    const fId = new ObjectID(req.body.fightId)
-    db.collection(dbName).updateOne({_id: fId},{
-        $set: {
-            for: req.body.forFight + 1
-        }
-    },{
-        sort: {_id: -1},
-        upsert: false
-    })
-    .then(result => {
-        console.log('Added One Like')
-        res.json('Like Added')
-    })
-    .catch(error => console.error(error))
-})
-
-app.put('/addOneAgainst', (req,res)=>{
-    const fId = new ObjectID(req.body.fightId)
-    db.collection(dbName).updateOne({_id: fId},{
-        $set: {
-            against: req.body.againstFight + 1
-        }
-    },{
-        sort: {_id: -1},
-        upsert: false
-    })
-    .then(result => {
-        console.log('Added One against')
-        res.json('against Added')
-    })
-    .catch(error => console.error(error))
-})
-   
-  
-    
-
-
-app.delete('/deleteFight', (req,res)=>{
-    const fId = new ObjectID(req.body.fightId)
-    db.collection(dbName).deleteOne({_id: fId})
-    .then(result => {
-        console.log(`${req.body.fightId} deleted`)
-        res.json("Fight Deleted")
-    })
-    .catch(err => console.error(err))
-})
 
